@@ -6,7 +6,7 @@ var AddressSchema = mongoose.Schema({
 	address: String,
 	floors: String,
 	numberElevators: Number,
-	gfloor: { type: Boolean, default: null},
+	gfloor: { type: Boolean},
 	basement: { type: Boolean},
 	date: { type: Date, default: Date.now }
 });

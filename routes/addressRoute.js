@@ -13,8 +13,31 @@ router.get('/add', (req, res) => {
 	res.render('add');
 });
 
+var checkboxCheck = function (req, res, next){
+	if(req.body.gfloor == undefined){
+		req.body.gfloor = false;
+	}
+
+	if(req.body.basement == undefined){
+		req.body.basement = false;
+	}
+	next();
+}
+
+router.use(checkboxCheck);
+
 router.post('/add', (req, res) => {
-	Address.create(req.body, function(err,results){
+	var newAddress = new Address({
+		regnum: req.body.regnum,
+		city: req.body.city,
+		address: req.body.address,
+		floors: req.body.floors,
+		numberElevators: req.body.numberElevators,
+		gfloor: req.body.gfloor,
+		basement: req.body.basement
+	});
+
+	newAddress.save(function(err,result){
 		if(err) throw err;
 		res.redirect('/');
 	});
