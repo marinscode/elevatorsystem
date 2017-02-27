@@ -1,0 +1,41 @@
+<%- include('header'); %>
+<%- include('nav'); %>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Type</th>
+			<th>Control Panel</th>
+			<th>Manufacturer</th>
+			<th>SchemeType</th>
+			<th>Doors</th>
+			<th>Max Weight</th>
+			<th>Person Capacity</th>
+			<th>Velocity</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for(var i=0, n = results.length; i< n; i++) {%>
+		<tr>
+			<td><%= i+1 %></td>
+			<td><%= results[i].type %></td>
+			<td><%= results[i].controlPanel %></td>
+			<td><%= results[i].manufacturer %></td>
+			<td><a href="schemetype/<%= results[i].schemeType[0]._id %>"><%= results[i].schemeType[0].name %></a></td>
+			<td><%= results[i].doors %></td>
+			<td><%= results[i].maxWeight %></td>
+			<td><%= results[i].personCapacity %></td>
+			<td><%= results[i].velocity %></td>
+			<td>
+				<a href="elevator/edit/<%= results[i]._id %>"><button class="btn btn-info">Edit</button></a>
+			</td>
+			<td>
+				<form method="POST" action="elevator/<%= results[i]._id %>?_method=DELETE"><button class="btn btn-danger">Delete</button></form>
+			</td>
+		</tr>
+		<% } %>
+	</tbody>
+</table>
+
+<%- include('footer'); %>

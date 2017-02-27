@@ -10,6 +10,7 @@
 			<th>Address</th>
 			<th>Floors</th>
 			<th>Elevators</th>
+			<th>Type Elevator</th>
 			<th>Ground Floor</th>
 			<th>Basement</th>
 		</tr>
@@ -23,6 +24,7 @@
 			<td><%= results[i].address %></td>
 			<td><%= results[i].floors %></td>
 			<td><%= results[i].numberElevators %></td>
+			<td><a href="elevator/<%= results[i].typeElevator.typeId %>"><%= results[i].typeElevator.text %></a></td>
 			<td><%if (results[i].gfloor){ %>
 				<span class="glyphicon glyphicon-ok"></span>
 				<% } else {%>
@@ -36,10 +38,10 @@
 				<% } %>
 			</td>
 			<td>
-				<a href="address/<%= results[i]._id %>"><button class="btn btn-info">Edit</button></a>
+				<a href="address/edit/<%= results[i]._id %>"><button class="btn btn-info">Edit</button></a>
 			</td>
 			<td>
-				<form method="POST" action="address/<%= results[i]._id %>?_method=DELETE"><button class="btn btn-danger">Delete</button></form>
+				<form method="POST" action="address/delete/<%= results[i]._id %>?_method=DELETE"><button class="btn btn-danger">Delete</button></form>
 			</td>
 		</tr>
 		<% } %>

@@ -1,16 +1,20 @@
 var express = require('express');
 var router = express.Router();
 var Address = require('../models/address');
+var Elevator = require('../models/elevators');
 
 router.get('/', (req, res) => {
 	Address.find((err, results)=> {
-		if (err) throw err;
-		res.render('index', {results: results});
+		if(err) throw err;
+		res.render('addresses', {results: results});
 	});
 });
 
 router.get('/add', (req, res) => {
-	res.render('add');
+	Elevator.find((err, elevators) => {
+		if (err) throw err;
+		res.render('addAddress', {elevators: elevators});
+	});
 });
 
 var checkboxCheck = function (req, res, next){
@@ -24,42 +28,68 @@ var checkboxCheck = function (req, res, next){
 	next();
 }
 
-router.use(checkboxCheck);
-
-router.post('/add', (req, res) => {
-	var newAddress = new Address({
-		regnum: req.body.regnum,
-		city: req.body.city,
-		address: req.body.address,
-		floors: req.body.floors,
-		numberElevators: req.body.numberElevators,
-		gfloor: req.body.gfloor,
-		basement: req.body.basement
-	});
-
-	newAddress.save(function(err,result){
+router.post('/add', checkboxCheck, (req, res) => {
+	Elevator.find({type: req.body.typeElevator}, (err, elevator) => {
+		if (err) throw err;
+		var newAddress = new Address({
+			regnum: req.body.regnum,
+			city: req.body.city,
+			address: req.body.address,
+			floors: req.body.floors,
+			numberElevators: req.body.numberElevators,
+			typeElevator: {
+				text: req.body.typeElevator,
+				typeId: elevator[0]._id
+			},
+			gfloor: req.body.gfloor,
+			basement: req.body.basement
+		});
+		newAddress.save(function(err){
 		if(err) throw err;
+		Address.find({})
+            .populate('typeElevator[0].typeId')
+            .exec(function(error) {
+                if(err) throw err;
+            });
 		res.redirect('/');
+		});
 	});
 });
 
-router.get('/:id', (req, res) => {
+router.get('/edit/:id', (req, res) => {
 	var id = req.params.id;
 	Address.findOne({_id: id}, (err, result) => {
 		if(err) throw err;
-		res.render('edit', {result: result});
+		Elevator.find((err, elevators) => {
+			if(err) throw err;
+			res.render('editAddress', {result: result,
+									   elevators: elevators});
+		});
 	});
 });
 
-router.put('/:id', (req, res) => {
+router.put('/edit/:id', checkboxCheck, (req, res) => {
 	var id = req.params.id;
-	Address.findOneAndUpdate({_id: id}, req.body, (err, result) => {
-		if(err) throw err;
-		res.redirect('/');
+	Elevator.find({type: req.body.typeElevator}, (err, elevator) => {
+		Address.findOneAndUpdate({_id: id}, {$set: {
+			regnum: req.body.regnum,
+			city: req.body.city,
+			address: req.body.address,
+			floors: req.body.floors,
+			numberElevators: req.body.numberElevators,
+			typeElevator: {
+				text: req.body.typeElevator,
+				typeId: elevator[0]._id
+			},
+			gfloor: req.body.gfloor,
+			basement: req.body.basement}}, (err, result) => {
+			if(err) throw err;
+			res.redirect('/');
+		});
 	});
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/delete/:id', (req, res) => {
 	var id = req.params.id;
 	Address.remove({_id: id}, (err,result) => {
 		if(err) throw err;

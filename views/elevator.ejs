@@ -1,0 +1,54 @@
+<%- include('header'); %>
+<%- include('nav'); %>
+
+  <div class="container">
+    <form method="POST" action="<%= result._id %>?_method=PUT">
+      <div class="form-group">
+        <label>Type</label>
+        <select name="type">
+            <option value="empty"></option>
+            <option value="Electrical" <% if(result.type == "Electrical") { %> selected <% } %>>Electrical</option>
+            <option value="Hydraulic" <% if(result.type == "Hydraulic") { %> selected <% } %>>Hydraulic</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Control Panel</label>
+        <select name="controlPanel">
+            <option value="empty"></option>  
+            <option value="Central Electrical Switch" <% if(result.controlPanel == "Central Electrical Switch") { %> selected <% } %>>Central Electrical Switch</option>
+            <option value="Relay Panel" <% if(result.controlPanel == "Relay Panel") { %> selected <% } %>>Relay Panel</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Controller</label>
+        <input type="text" class="form-control" name="controller" value="<%= result.controller %>">
+      </div>
+      <div class="form-group">
+        <label>Manufacturer</label>
+        <input type="text" class="form-control" name="manufacturer" value="<%= result.manufacturer %>">
+      </div>
+      <div class="form-group">
+        <label>Scheme Type</label>
+        <input type="text" class="form-control" name="schemeTypeName" value="<%= result.schemeType[0].name %>">
+      </div>
+      <div class="form-group">
+        <label>Doors</label>
+        <input type="number" class="form-control" name="doors" value="<%= result.doors %>">
+      </div>
+      <div class="form-group">
+        <label>Max Weight</label>
+        <input type="number" class="form-control" name="maxWeight" value="<%= result.maxWeight %>">
+      </div>
+      <div class="form-group">
+        <label>Person Capacity</label>
+        <input type="number" class="form-control" name="personCapacity" value="<%= result.personCapacity %>">
+      </div>
+      <div class="form-group">
+        <label>Velocity</label>
+        <input type="number" class="form-control" name="velocity" value="<%= result.velocity %>">
+      </div>
+      <button type="submit" class="btn btn-default">Update</button>
+    </form>
+  </div>
+
+<%- include('footer'); %>
