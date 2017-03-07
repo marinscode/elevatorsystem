@@ -1,5 +1,24 @@
 <%- include('header'); %>
-<%- include('nav'); %>
+
+<div class="row">
+	<div class="col-lg-1">
+		<h4 class="text-center">List of adresses</h4>
+	</div>
+	<div class="col-lg-6">
+	<form method="GET" action="search">
+	    <div class="input-group">
+	    	<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+	      	<input type="text" class="form-control" placeholder="Search for addresses" name="search">
+	      	<span class="input-group-btn">
+	        	<button class="btn btn-default" type="submit">Search</button>
+	      	</span>
+	    </div><!-- /input-group -->
+	    </form>
+	</div><!-- /.col-lg-6 -->
+	<div class="col-lg-1">
+		
+	</div>
+</div>
 
 <table class="table table-striped">
 	<thead>
@@ -10,9 +29,11 @@
 			<th>Address</th>
 			<th>Floors</th>
 			<th>Elevators</th>
-			<th>Type Elevator</th>
 			<th>Ground Floor</th>
 			<th>Basement</th>
+			<th>Type Elevator</th>
+			<th>Max Weight</th>
+			<th>Velocity</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,7 +45,6 @@
 			<td><%= results[i].address %></td>
 			<td><%= results[i].floors %></td>
 			<td><%= results[i].numberElevators %></td>
-			<td><a href="elevator/<%= results[i].typeElevator.typeId %>"><%= results[i].typeElevator.text %></a></td>
 			<td><%if (results[i].gfloor){ %>
 				<span class="glyphicon glyphicon-ok"></span>
 				<% } else {%>
@@ -37,15 +57,19 @@
 				<span class="glyphicon glyphicon-remove"></span>
 				<% } %>
 			</td>
+			<td><a href="elevator/<%= results[i].typeElevator.typeId %>"><%= results[i].typeElevator.text %></a></td>
+			<td><%= results[i].elevator[0].maxWeight %></td>
+			<td><%= results[i].elevator[0].velocity %></td>
 			<td>
 				<a href="address/edit/<%= results[i]._id %>"><button class="btn btn-info">Edit</button></a>
 			</td>
 			<td>
-				<form method="POST" action="address/delete/<%= results[i]._id %>?_method=DELETE"><button class="btn btn-danger">Delete</button></form>
+				<form method="POST" action="address/delete/<%= results[i]._id %>?_method=DELETE"><button class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this address?');">Delete</button></form>
 			</td>
 		</tr>
 		<% } %>
 	</tbody>
 </table>
+</div>
 
 <%- include('footer'); %>

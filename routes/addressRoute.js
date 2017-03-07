@@ -4,9 +4,14 @@ var Address = require('../models/address');
 var Elevator = require('../models/elevators');
 
 router.get('/', (req, res) => {
-	Address.find((err, results)=> {
-		if(err) throw err;
-		res.render('addresses', {results: results});
+	Address.aggregate({$lookup: { 
+		from: 'elevators',
+		localField: "typeElevator.typeId",
+        foreignField: "_id",
+        as: "elevator" }}).exec((err, results)=> {
+			if(err) throw err;
+			console.log(results[0].elevator[0].maxWeight);
+			res.render('addresses', {results});
 	});
 });
 

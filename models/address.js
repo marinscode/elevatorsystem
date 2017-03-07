@@ -16,4 +16,6 @@ var AddressSchema = new mongoose.Schema({
 	date: { type: Date, default: Date.now }
 });
 
+AddressSchema.index({"$**": "text"});
+
 var Address = module.exports = mongoose.model('Address', AddressSchema);
