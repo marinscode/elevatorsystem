@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var ElevatorSchema = new mongoose.Schema({
+const ElevatorSchema = new mongoose.Schema({
 	type: String,
 	controlPanel: String,
 	controller: String,
@@ -12,7 +12,8 @@ var ElevatorSchema = new mongoose.Schema({
 	doors: Number,
 	maxWeight: Number,
 	personCapacity: Number,
-	velocity: Number
+	velocity: Number,
+	typeDoors: String
 });
 
-var Elevator = module.exports = mongoose.model('Elevator', ElevatorSchema);
+module.exports = mongoose.model('Elevator', ElevatorSchema);

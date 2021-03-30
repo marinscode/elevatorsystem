@@ -1,19 +1,22 @@
-var express = require('express');
-var router = express.Router();
-var Address = require('../models/address');
-var Elevator = require('../models/elevators');
+const express = require('express');
+const router = express.Router();
+
+const Address = require('../models/address');
+const Elevator = require('../models/elevators');
 
 router.get('/', (req, res) => {
-	Address.aggregate({$lookup: { 
+	// aggregate data from 2 collections for dashboard table
+	Address.aggregate([{$lookup: { 
 		from: 'elevators',
 		localField: "typeElevator.typeId",
         foreignField: "_id",
-        as: "elevator" }}).exec((err, results)=> {
+        as: "elevator" }}]).exec((err, results)=> {
 			if(err) throw err;
-			console.log(results[0].elevator[0].maxWeight);
 			res.render('addresses', {results});
 	});
 });
+
+
 
 router.get('/add', (req, res) => {
 	Elevator.find((err, elevators) => {
@@ -22,13 +25,17 @@ router.get('/add', (req, res) => {
 	});
 });
 
-var checkboxCheck = function (req, res, next){
-	if(req.body.gfloor == undefined){
+const checkboxCheck = function (req, res, next){
+	if(req.body.gfloor === undefined){
 		req.body.gfloor = false;
 	}
 
-	if(req.body.basement == undefined){
+	if(req.body.basement === undefined){
 		req.body.basement = false;
+	}
+
+	if(req.body.isActive === undefined){
+		req.body.isActive = false;
 	}
 	next();
 }
@@ -47,7 +54,8 @@ router.post('/add', checkboxCheck, (req, res) => {
 				typeId: elevator[0]._id
 			},
 			gfloor: req.body.gfloor,
-			basement: req.body.basement
+			basement: req.body.basement,
+			isActive: req.body.isActive
 		});
 		newAddress.save(function(err){
 		if(err) throw err;
@@ -87,7 +95,8 @@ router.put('/edit/:id', checkboxCheck, (req, res) => {
 				typeId: elevator[0]._id
 			},
 			gfloor: req.body.gfloor,
-			basement: req.body.basement}}, (err, result) => {
+			basement: req.body.basement,
+			isActive: req.body.isActive}}, (err, result) => {
 			if(err) throw err;
 			res.redirect('/');
 		});

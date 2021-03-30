@@ -26,7 +26,8 @@ router.post('/add', (req, res) => {
 		doors: req.body.doors,
 		maxWeight: req.body.maxWeight,
 		personCapacity: req.body.personCapacity,
-		velocity: req.body.velocity
+		velocity: req.body.velocity,
+		typeDoors: req.body.typeDoors
 	});
 	newElevator.save(function(err){
 		if(err) throw err;

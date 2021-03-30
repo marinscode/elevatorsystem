@@ -1,46 +1,46 @@
-var express = require('express');
-var app = express();
-var ejs = require('ejs');
-var path = require('path');
-var mongoose = require('mongoose');
-var config = require('./config');
-var bodyParser = require('body-parser');
-var Address = require('./models/address');
-var port = process.env.PORT || 3000;
-var addressRouter = require('./routes/addressRoute');
-var elevatorRouter = require('./routes/elevatorRoute');
-var methodOverride = require('method-override');
+const express = require('express');
+const app = express();
+const ejs = require('ejs');
+const path = require('path');
+const mongoose = require('mongoose');
+const config = require('./config');
+const Address = require('./models/address');
+const port = process.env.PORT || 3000;
+const addressRouter = require('./routes/addressRoute');
+const elevatorRouter = require('./routes/elevatorRoute');
+const methodOverride = require('method-override');
 
-var dbUrl = 'mongodb://'+ config.user +':'+ config.pass + '@ds155509.mlab.com:55509/elevsystem';
+const dbUrl = `mongodb+srv://${config.user}:${config.pass}@cluster0.eiv23.mongodb.net/${config.db}`;
 
-mongoose.connect(dbUrl);
-var db = mongoose.connection;
+mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true});
+const db = mongoose.connection;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+mongoose.set('useCreateIndex', true);
 
 app.use(methodOverride('_method'));
 
-Address.collection.dropIndex('*', function(err, result) {
-	    if (err) {
-	        console.log('Error in dropping index!', err);
-	    }
-	    console.log(result);
-});
+// Address.collection.dropIndex('*', function(err, result) {
+// 	    if (err) {
+// 	        console.log('Error in dropping index!', err);
+// 	    }
+// 	    console.log(result);
+// });
 
 app.get('/', (req, res) => {
-	Address.aggregate({$lookup: { 
+	Address.aggregate([{$lookup: { 
 		from: 'elevators',
 		localField: "typeElevator.typeId",
         foreignField: "_id",
-        as: "elevator" }}).exec((err, results)=> {
+        as: "elevator" }}]).exec((err, results)=> {
 			if(err) throw err;
-			console.log(results[0].elevator[0].maxWeight);
 			res.render('addresses', {results});
 	});
 });

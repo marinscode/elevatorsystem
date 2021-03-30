@@ -34,6 +34,10 @@
 			<th>Type Elevator</th>
 			<th>Max Weight</th>
 			<th>Velocity</th>
+			<th>Type schema</th>
+			<th>Type doors</th>
+			<th>Next expection</th>
+			<th>Is active?</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -60,6 +64,30 @@
 			<td><a href="elevator/<%= results[i].typeElevator.typeId %>"><%= results[i].typeElevator.text %></a></td>
 			<td><%= results[i].elevator[0].maxWeight %></td>
 			<td><%= results[i].elevator[0].velocity %></td>
+			<td><%if (results[i].isActive){ %>
+				<span class="glyphicon glyphicon-ok"></span>
+				<% } else {%>
+				<span class="glyphicon glyphicon-remove"></span>
+				<% } %>
+			</td>
+			<td><%if (results[i].isActive){ %>
+				<span class="glyphicon glyphicon-ok"></span>
+				<% } else {%>
+				<span class="glyphicon glyphicon-remove"></span>
+				<% } %>
+			</td>
+			<td><%if (results[i].isActive){ %>
+				<span class="glyphicon glyphicon-ok"></span>
+				<% } else {%>
+				<span class="glyphicon glyphicon-remove"></span>
+				<% } %>
+			</td>
+			<td><%if (results[i].isActive){ %>
+				<span class="glyphicon glyphicon-ok"></span>
+				<% } else {%>
+				<span class="glyphicon glyphicon-remove"></span>
+				<% } %>
+			</td>
 			<td>
 				<a href="address/edit/<%= results[i]._id %>"><button class="btn btn-info">Edit</button></a>
 			</td>

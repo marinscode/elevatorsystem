@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var AddressSchema = new mongoose.Schema({
+const AddressSchema = new mongoose.Schema({
 	regnum: String,
 	city: String,
 	address: String,
@@ -11,11 +11,14 @@ var AddressSchema = new mongoose.Schema({
 		typeId:	{ type: mongoose.Schema.Types.ObjectId,
         	  	  ref: 'Elevator'}
 	},
-	gfloor: { type: Boolean},
-	basement: { type: Boolean},
+	gfloor: Boolean,
+	basement: Boolean,
+	isActive: Boolean,
 	date: { type: Date, default: Date.now }
 });
 
+
+//index the schema for searching
 AddressSchema.index({"$**": "text"});
 
-var Address = module.exports = mongoose.model('Address', AddressSchema);
+module.exports = mongoose.model('Address', AddressSchema);
